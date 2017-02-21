@@ -516,9 +516,12 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
+  //change the number of moving pizzas according to the height of the window.
+  var rows = Math.round(window.screen.height / s);
+  var pizzaNum = rows * cols;
   //move the query outside the loopto avoid querying each time in the loop;
   var movingPizzas = document.querySelector("#movingPizzas1");
-  for (var i = 0; i < 200; i++) {
+  for (var i = 0; i < pizzaNum; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
