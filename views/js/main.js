@@ -403,16 +403,17 @@ var resizePizzas = function(size) {
   window.performance.mark("mark_start_resize");   // User Timing API function
 
   // Changes the value for the size of the pizza above the slider
+  //use ducument.getElementById() instead of querySelector, since the first Web API is faster.
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
-        document.querySelector("#pizzaSize").innerHTML = "Small";
+        document.getElementById("pizzaSize").innerHTML = "Small";
         return;
       case "2":
-        document.querySelector("#pizzaSize").innerHTML = "Medium";
+        document.getElementById("pizzaSize").innerHTML = "Medium";
         return;
       case "3":
-        document.querySelector("#pizzaSize").innerHTML = "Large";
+        document.getElementById("pizzaSize").innerHTML = "Large";
         return;
       default:
         console.log("bug in changeSliderLabel");
@@ -438,7 +439,8 @@ var resizePizzas = function(size) {
           console.log("bug in sizeSwitcher");
       }
     //move the query outside the loop to avoid forced synchronous layout.
-    var randomPizzas = document.querySelectorAll(".randomPizzaContainer");
+    //replace querySelectorAll() with getElementsByClassName(), which is faster.
+    var randomPizzas = document.getElementsByClassName("randomPizzaContainer");
     
     for (var i = 0; i < randomPizzas.length; i++) {
       randomPizzas[i].style.width = newWidth + "%";
@@ -490,12 +492,13 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-
-  var items = document.querySelectorAll('.mover');
+// replace querySelectorAll() with getElementsByClassName(), which is faster.
+  var items = document.getElementsByClassName('mover');
 // Move document.body from the loop to avoid querying DOM each time when the loop iterates.
   var bar = document.body.scrollTop / 1250;
-  for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin((bar) + (i % 5));
+  // Declaring the phase variable (var phase;) in the initialisation of the for loop will prevent it from being created every time the loop is executed.
+  for (var i = 0, phase; i < items.length; i++) {
+    phase = Math.sin(bar + i % 5);
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
@@ -521,8 +524,9 @@ document.addEventListener('DOMContentLoaded', function() {
   var pizzaNum = rows * cols;
   //move the query outside the loopto avoid querying each time in the loop;
   var movingPizzas = document.querySelector("#movingPizzas1");
-  for (var i = 0; i < pizzaNum; i++) {
-    var elem = document.createElement('img');
+  // Declaring the elem variable (var elem;) in the initialisation of the for-loop will prevent it from being created every time the loop is executed.
+  for (var i = 0, elem; i < pizzaNum; i++) {
+    elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
